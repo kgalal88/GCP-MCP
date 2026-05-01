@@ -1,0 +1,107 @@
+================================================
+Database Setup
+================================================
+
+[1/5] Creating Cloud SQL instance...
+      Creating instance (takes 5-10 minutes)...
+Creating Cloud SQL instance for POSTGRES_17...
+.............done.
+Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/waybackhome-qxln4tprji8q9zklz8/instances/jobs-instance].
+NAME: jobs-instance
+DATABASE_VERSION: POSTGRES_17
+LOCATION: us-central1-f
+TIER: db-custom-1-3840
+PRIMARY_ADDRESS: 34.27.147.62
+PRIVATE_ADDRESS: -
+STATUS: RUNNABLE
+      ✓ Instance ready
+
+[2/5] Verifying instance state...
+      ✓ Instance is RUNNABLE
+
+[3/5] Granting Vertex AI permissions...
+Updated IAM policy for project [waybackhome-qxln4tprji8q9zklz8].
+bindings:
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-aiplatform.iam.gserviceaccount.com
+  role: roles/aiplatform.serviceAgent
+- members:
+  - serviceAccount:p99546327658-cwy11i@gcp-sa-cloud-sql.iam.gserviceaccount.com
+  - serviceAccount:way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+  role: roles/aiplatform.user
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-artifactregistry.iam.gserviceaccount.com
+  role: roles/artifactregistry.serviceAgent
+- members:
+  - serviceAccount:way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+  role: roles/bigquery.dataViewer
+- members:
+  - serviceAccount:way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+  role: roles/bigquery.user
+- members:
+  - serviceAccount:99546327658@cloudbuild.gserviceaccount.com
+  role: roles/cloudbuild.builds.builder
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-cloudbuild.iam.gserviceaccount.com
+  role: roles/cloudbuild.serviceAgent
+- members:
+  - serviceAccount:99546327658@cloudservices.gserviceaccount.com
+  role: roles/compute.instanceGroupManagerServiceAgent
+- members:
+  - serviceAccount:service-99546327658@compute-system.iam.gserviceaccount.com
+  role: roles/compute.serviceAgent
+- members:
+  - serviceAccount:service-99546327658@containerregistry.iam.gserviceaccount.com
+  role: roles/containerregistry.ServiceAgent
+- members:
+  - serviceAccount:service-99546327658@dataflow-service-producer-prod.iam.gserviceaccount.com
+  role: roles/dataflow.serviceAgent
+- members:
+  - serviceAccount:99546327658-compute@developer.gserviceaccount.com
+  - serviceAccount:99546327658@cloudservices.gserviceaccount.com
+  role: roles/editor
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-notebooks.iam.gserviceaccount.com
+  role: roles/notebooks.serviceAgent
+- members:
+  - user:khalid.mtwaly@gmail.com
+  role: roles/owner
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-pubsub.iam.gserviceaccount.com
+  role: roles/pubsub.serviceAgent
+- members:
+  - serviceAccount:99546327658-compute@developer.gserviceaccount.com
+  role: roles/run.admin
+- members:
+  - serviceAccount:way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+  role: roles/run.invoker
+- members:
+  - serviceAccount:service-99546327658@serverless-robot-prod.iam.gserviceaccount.com
+  role: roles/run.serviceAgent
+- members:
+  - serviceAccount:service-99546327658@gcp-sa-spanner.iam.gserviceaccount.com
+  role: roles/spanner.serviceAgent
+- members:
+  - serviceAccount:way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+  role: roles/storage.objectViewer
+etag: BwZPujBJX24=
+version: 1
+      ✓ Permissions granted
+
+[4/5] Creating database...
+Creating Cloud SQL database...
+.done.
+Created database [jobs_db].
+instance: jobs-instance
+name: jobs_db
+project: waybackhome-qxln4tprji8q9zklz8
+      ✓ Database 'jobs_db' ready
+
+[5/5] Seeding database and generating embeddings...
+      ✓ Inserted 15 jobs
+      ✓ Generated 15 embeddings
+
+================================================
+Setup complete!
+================================================
+

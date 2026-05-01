@@ -1,0 +1,10 @@
+# .dockerignore
+.venv/
+__pycache__/
+*.pyc
+.env
+jobs_agent/.env
+toolbox
+tools.yaml
+seed.sql
+deploy-toolbox/

@@ -1,0 +1,17 @@
+2026-04-18T11:33:35.306096532Z INFO "Initialized 1 sources: jobs-db" 
+2026-04-18T11:33:35.306174752Z INFO "Initialized 0 authServices: " 
+2026-04-18T11:33:35.306200942Z INFO "Using Vertex AI backend for Gemini embedding" "waybackhome-qxln4tprji8q9zklz8" "global" 
+2026-04-18T11:33:35.306293292Z INFO "Initialized 1 embeddingModels: gemini-embedding" 
+2026-04-18T11:33:35.306335862Z INFO "Initialized 4 tools: search-jobs-by-description, add-job, search-jobs, get-job-details" 
+2026-04-18T11:33:35.306357952Z INFO "Initialized 1 toolsets: default" 
+2026-04-18T11:33:35.306363852Z INFO "Initialized 0 prompts: " 
+2026-04-18T11:33:35.306374052Z INFO "Initialized 1 promptsets: default" 
+2026-04-18T11:33:35.306403082Z WARN "wildcard (`*`) allows all origin to access the resource and is not secure. Use it with cautious for public, non-sensitive data, or during local development. Recommended to use `--allowed-origins` flag" 
+2026-04-18T11:33:35.306427302Z WARN "wildcard (`*`) allows all hosts to access the resource and is not secure. Use it with cautious for public, non-sensitive data, or during local development. Recommended to use `--allowed-hosts` flag to prevent DNS rebinding attacks" 
+2026-04-18T11:33:35.310930442Z INFO "Server ready to serve!" 
+2026-04-18T11:34:02.224817871Z INFO "GET /api/toolset => HTTP 200 (246.899µs)" "http://localhost:5000/api/toolset" "GET" "/api/toolset" "127.0.0.1:58874" "localhost:5000" "http" "HTTP/1.1" 0 "curl/8.5.0" "" 200 "0.000246899s" 3138 
+2026-04-18T11:35:15.564481735Z INFO "POST /api/tool/search-jobs/invoke => HTTP 200 (331.003845ms)" "http://localhost:5000/api/tool/search-jobs/invoke" "POST" "/api/tool/search-jobs/invoke" "127.0.0.1:56546" "localhost:5000" "http" "HTTP/1.1" 37 "curl/8.5.0" "" 200 "0.331003845s" 475 
+2026-04-18T11:40:38.756918542Z INFO "POST /mcp/ => HTTP 200 (414.1µs)" "http://127.0.0.1:5000/mcp/" "POST" "/mcp/" "127.0.0.1:34672" "127.0.0.1:5000" "http" "HTTP/1.1" 219 "Python/3.11 aiohttp/3.13.5" "" 200 "0.0004141s" 260 
+2026-04-18T11:40:38.757935311Z INFO "POST /mcp/ => HTTP 202 (95.511µs)" "http://127.0.0.1:5000/mcp/" "POST" "/mcp/" "127.0.0.1:34672" "127.0.0.1:5000" "http" "HTTP/1.1" 71 "Python/3.11 aiohttp/3.13.5" "" 202 "0.000095511s" 0 
+2026-04-18T11:40:38.759591321Z INFO "POST /mcp/ => HTTP 200 (202.579µs)" "http://127.0.0.1:5000/mcp/" "POST" "/mcp/" "127.0.0.1:34672" "127.0.0.1:5000" "http" "HTTP/1.1" 102 "Python/3.11 aiohttp/3.13.5" "" 200 "0.000202579s" 3180 
+2026-04-18T11:40:40.097796411Z INFO "POST /mcp/ => HTTP 200 (218.620336ms)" "http://127.0.0.1:5000/mcp/" "POST" "/mcp/" "127.0.0.1:34672" "127.0.0.1:5000" "http" "HTTP/1.1" 175 "Python/3.11 aiohttp/3.13.5" "" 200 "0.218620336s" 595 

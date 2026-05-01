@@ -1,0 +1,139 @@
+# tools.yaml
+
+# --- Data Source ---
+kind: source
+name: jobs-db
+type: cloud-sql-postgres
+project: ${GOOGLE_CLOUD_PROJECT}
+region: ${REGION}
+instance: ${DB_INSTANCE}
+database: ${DB_NAME}
+user: postgres
+password: ${DB_PASSWORD}
+
+---
+# --- Tool 1: Search jobs by role and/or tech stack ---
+kind: tool
+name: search-jobs
+type: postgres-sql
+source: jobs-db
+description: >-
+  Search for job listings by role category and/or tech stack.
+  Use this tool when the developer wants to browse listings
+  by role (e.g., Backend, Frontend, Data) or find jobs
+  using a specific technology. Both parameters accept an
+  empty string to match all values.
+statement: |
+  SELECT title, company, role, tech_stack, salary_range, location, openings
+  FROM jobs
+  WHERE ($1 = '' OR LOWER(role) = LOWER($1))
+  AND ($2 = '' OR LOWER(tech_stack) LIKE '%' || LOWER($2) || '%')
+  ORDER BY title
+  LIMIT 10
+parameters:
+  - name: role
+    type: string
+    description: "The role category to filter by (e.g., 'Backend', 'Frontend', 'Data/AI', 'DevOps'). Use empty string for all roles."
+  - name: tech_stack
+    type: string
+    description: "A technology to search for in the tech stack (partial match, e.g., 'Python', 'Kubernetes'). Use empty string for all tech stacks."
+
+---
+
+# --- Tool 2: Get full details for a specific job ---
+kind: tool
+name: get-job-details
+type: postgres-sql
+source: jobs-db
+description: >-
+  Get full details for a specific job listing including its description,
+  salary range, location, and number of openings. Use this tool when the
+  developer asks about a particular job by title or company.
+statement: |
+  SELECT title, company, role, tech_stack, salary_range, location, openings, description
+  FROM jobs
+  WHERE LOWER(title) LIKE '%' || LOWER($1) || '%'
+  OR LOWER(company) LIKE '%' || LOWER($1) || '%'
+parameters:
+  - name: search_term
+    type: string
+    description: "The job title or company name to look up (partial match supported)."
+
+---
+# --- Embedding Model ---
+kind: embeddingModel
+name: gemini-embedding
+type: gemini
+model: gemini-embedding-001
+project: ${GOOGLE_CLOUD_PROJECT}
+location: ${GOOGLE_CLOUD_LOCATION}
+dimension: 3072
+
+---
+# --- Tool 3: Semantic search by description ---
+kind: tool
+name: search-jobs-by-description
+type: postgres-sql
+source: jobs-db
+description: >-
+  Find jobs that match a natural language description of what the developer
+  is looking for. Use this tool when the developer describes their ideal job
+  using interests, work style, career goals, or project type rather than a
+  specific role or tech stack. Examples: "I want to work on AI chatbots,"
+  "a remote job at a fintech startup," "something involving infrastructure
+  and reliability."
+statement: |
+  SELECT title, company, role, tech_stack, salary_range, location, description
+  FROM jobs
+  WHERE description_embedding IS NOT NULL
+  ORDER BY description_embedding <=> $1
+  LIMIT 5
+parameters:
+  - name: search_query
+    type: string
+    description: "A natural language description of the kind of job the developer is looking for."
+    embeddedBy: gemini-embedding
+
+---
+# --- Tool 4: Add a new job listing with automatic embedding ---
+kind: tool
+name: add-job
+type: postgres-sql
+source: jobs-db
+description: >-
+  Add a new job listing to the platform. Use this tool when a user asks
+  to post a job that is not currently listed.
+statement: |
+  INSERT INTO jobs (title, company, role, tech_stack, salary_range, location, openings, description, description_embedding)
+  VALUES ($1, $2, $3, $4, $5, $6, CAST($7 AS INTEGER), $8, $9)
+  RETURNING title, company
+parameters:
+  - name: title
+    type: string
+    description: "The job title (e.g., 'Senior Backend Engineer')."
+  - name: company
+    type: string
+    description: "The company name (e.g., 'Stripe', 'Spotify')."
+  - name: role
+    type: string
+    description: "The role category (e.g., 'Backend', 'Frontend', 'Data/AI', 'DevOps')."
+  - name: tech_stack
+    type: string
+    description: "Comma-separated list of technologies (e.g., 'Python, FastAPI, GCP')."
+  - name: salary_range
+    type: string
+    description: "The salary range (e.g., '$150-200K/year')."
+  - name: location
+    type: string
+    description: "Work location and arrangement (e.g., 'Remote')."
+  - name: openings
+    type: string
+    description: "The number of open positions."
+  - name: description
+    type: string
+    description: "A short description of the job (2-3 sentences)."
+  - name: description_vector
+    type: string
+    description: "Auto-generated embedding vector for the job description."
+    valueFromParam: description
+    embeddedBy: gemini-embedding
