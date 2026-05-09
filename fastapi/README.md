@@ -45,6 +45,7 @@ docker run -p 8080:8080 fastapi-job-proxy
 gcloud run deploy fastapi-job-proxy \
 --source . \
 --region us-central1 \
+--project=waybackhome-qxln4tprji8q9zklz8 \
 --allow-unauthenticated \
 --service-account fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
 

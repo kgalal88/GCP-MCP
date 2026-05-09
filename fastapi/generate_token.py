@@ -4,8 +4,8 @@ import google.auth
 from google.auth.transport.requests import Request
 from google.auth import impersonated_credentials
 
-TARGET_SA = os.getenv("TARGET_SA")
-AUDIENCE = os.getenv("AUDIENCE")
+TARGET_SA = os.getenv("TARGET_SA", "way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com")
+AUDIENCE = os.getenv("AUDIENCE", "jobs-agent")
 
 def get_oidc_token():
     # target_sa = "way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com"

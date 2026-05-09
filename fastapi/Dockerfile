@@ -7,9 +7,11 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Prevent Python buffering stdout/stderr
 ENV PYTHONUNBUFFERED=1
 
-ENV API_URL="https://toolbox-service-99546327658.us-central1.run.app"
+ENV API_URL="https://toolbox-service-99546327658.us-central1.run.app/api/tool"
 ENV TARGET_SA="way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com"
 ENV AUDIENCE="jobs-agent"
+
+ENV AGENT_API_URL="https://jobs-agent-99546327658.us-central1.run.app"
 
 #ENV GOOGLE_APPLICATION_CREDENTIALS=/tmp/adc.json
 
