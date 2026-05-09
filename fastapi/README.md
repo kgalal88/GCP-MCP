@@ -3,8 +3,6 @@
 
 # 🐧 Bash Script (Linux / Mac)
 
-Save as: `generate-readme.sh`
-
 ```bash
 #!/bin/bash
 
