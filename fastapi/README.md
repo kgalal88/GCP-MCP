@@ -48,14 +48,14 @@ gcloud run deploy fastapi-job-proxy \
 --source . \
 --region us-central1 \
 --allow-unauthenticated \
---service-account fastapi-job-proxy@PROJECT_ID.iam.gserviceaccount.com
+--service-account fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
 
 ---
 
 ## 🔐 IAM Setup
 
 gcloud run services add-iam-policy-binding toolbox-service \
---member="serviceAccount:fastapi-job-proxy@PROJECT_ID.iam.gserviceaccount.com" \
+--member="serviceAccount:fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com" \
 --role="roles/run.invoker" \
 --region=us-central1
 
