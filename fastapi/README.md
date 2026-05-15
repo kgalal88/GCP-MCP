@@ -42,6 +42,10 @@ docker run -p 8080:8080 fastapi-job-proxy
 
 ## ☁️ Deploy to Cloud Run
 
+gcloud services enable run.googleapis.com gcloud services enable cloudbuild.googleapis.com gcloud services enable artifactregistry.googleapis.com gcloud services enable iamcredentials.googleapis.com
+
+gcloud iam service-accounts create fastapi-job-proxy --project=waybackhome-qxln4tprji8q9zklz8
+
 gcloud run deploy fastapi-job-proxy \
 --source . \
 --region us-central1 \
@@ -56,7 +60,8 @@ gcloud run deploy fastapi-job-proxy \
 gcloud run services add-iam-policy-binding toolbox-service \
 --member="serviceAccount:fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com" \
 --role="roles/run.invoker" \
---region=us-central1
+--region=us-central1 \
+--project=waybackhome-qxln4tprji8q9zklz8
 
 ---
 

@@ -1,0 +1,37 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: jobs-agent-mcp
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          image: us-central1-docker.pkg.dev/waybackhome-qxln4tprji8q9zklz8/cloud-run-source-deploy/jobs-agent2@sha256:631841ca4234d2251fe5b1552429127bcfc3ec7273b97c5188bccf90d5966f16
+          ports:
+            - containerPort: 8081
+          env:
+            - name: TOOLBOX_URL
+              value: "http://sidecar:8080"
+            - name: GOOGLE_GENAI_USE_VERTEXAI
+              value: "TRUE"
+            - name: GOOGLE_CLOUD_PROJECT
+              value: "waybackhome-qxln4tprji8q9zklz8"
+            - name: GOOGLE_CLOUD_LOCATION
+              value: "us-central1"
+
+        - name: sidecar
+          image: us-central1-docker.pkg.dev/waybackhome-qxln4tprji8q9zklz8/cloud-run-source-deploy/toolbox-service@sha256:884b88cb420464e02bd7e4e365518cf94c48614848d8dbcb2a93c80cf40e31af
+          env:
+            - name: DB_PASSWORD
+              value: "techjobs-pwd"
+            - name: DB_INSTANCE
+              value: "jobs-instance"
+            - name: DB_NAME
+              value: "jobs_db"
+            - name: GOOGLE_CLOUD_PROJECT
+              value: "waybackhome-qxln4tprji8q9zklz8"
+            - name: GOOGLE_CLOUD_LOCATION
+              value: "us-central1"
+            - name: REGION
+              value: "us-central1"

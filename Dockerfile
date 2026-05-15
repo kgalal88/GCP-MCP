@@ -5,5 +5,5 @@ COPY pyproject.toml ./
 COPY uv.lock ./
 RUN uv sync --no-dev
 COPY jobs_agent/ jobs_agent/
-EXPOSE 8080
-CMD ["uv", "run", "adk", "web", "--host", "0.0.0.0", "--port", "8080"]
+EXPOSE 8081
+CMD ["uv", "run", "adk", "web", "--host", "0.0.0.0", "--port", "8081"]
