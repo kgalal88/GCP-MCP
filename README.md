@@ -33,7 +33,7 @@ It consists of:
 ## 📁 Project Structure
 
 ```text
-fastapi-proxy/
+fastapi-proxy/           # API proxy for MCP agent and toolbox
 │
 ├── main.py              # FastAPI entrypoint
 ├── requirements.txt     # Dependencies
@@ -43,7 +43,7 @@ agent/                   # Deployment scripts (Toolbox + Jobs Agent)
 │
 ├── deploy-toolbox
 │    │
-│    ├── Dockerfile       # Container definition
+│    ├── Dockerfile       # Toolbox container definition
 │    ├── tools.yaml       # MCP Toolbox container definition
 ├── jobs_agent
 │    │
