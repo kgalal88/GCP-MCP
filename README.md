@@ -64,56 +64,12 @@ agent/                   # Deployment scripts (Toolbox + Jobs Agent)
 
 ---
 
-## 🧪 Example API Endpoints
-
-### Health Check
-
-```http
-GET /health
-```
-
-Response:
-
-```json
-{
-  "status": "ok"
-}
-```
-
----
-
-### Run Job
-
-```http
-POST /run-job
-```
-
-Request:
-
-```json
-{
-  "job_name": "data-processing",
-  "payload": {
-    "key": "value"
-  }
-}
-```
-
-Response:
-
-```json
-{
-  "message": "Job triggered successfully"
-}
-```
-
----
-
 ## 🐳 Docker
 
 ### Build Image
 
 ```bash
+cd fastapi-job-proxy/
 docker build -t fastapi-job-proxy .
 ```
 
@@ -128,7 +84,7 @@ docker run -p 8080:8080 fastapi-job-proxy
 ## ☁️ Cloud Architecture
 
 ```text
-FastAPI Proxy Service
+FastAPI Proxy Service (Cloud Run)
       ↓
 Jobs Agent Service (Cloud Run)
       ↓
@@ -151,7 +107,6 @@ gcloud run deploy fastapi-job-proxy --source . --region us-central1 --project=wa
 
 ```bash
 cd agent/
-
 gcloud run deploy toolbox-service \
   --source deploy-toolbox/ \
   --region $REGION \
@@ -179,7 +134,7 @@ echo "Toolbox URL: $TOOLBOX_URL"
 
 ```bash
 gcloud run deploy jobs-agent \
-  --source . \
+  --source jobs-agent \
   --region $REGION \
   --project=$GOOGLE_CLOUD_PROJECT \
   --set-env-vars "TOOLBOX_URL=$TOOLBOX_URL,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION,GOOGLE_GENAI_USE_VERTEXAI=TRUE"
