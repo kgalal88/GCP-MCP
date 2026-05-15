@@ -39,9 +39,16 @@ def search_jobs(payload: dict, request: Request, credentials: HTTPAuthorizationC
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.post(
         API_URL + "/search-jobs/invoke",
@@ -67,9 +74,16 @@ def search_jobs_by_description(payload: dict, request: Request, credentials: HTT
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.post(
         API_URL + "/search-jobs-by-description/invoke",
@@ -95,9 +109,16 @@ def add_job(payload: dict, request: Request, credentials: HTTPAuthorizationCrede
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.post(
         API_URL + "/add-job/invoke",
@@ -123,9 +144,16 @@ def get_agent_sessions(request: Request, credentials: HTTPAuthorizationCredentia
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.get(
         AGENT_API_URL + "/apps/jobs_agent/users/user/sessions",
@@ -150,9 +178,16 @@ def create_agent_session(payload: dict, request: Request, credentials: HTTPAutho
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.post(
         AGENT_API_URL + "/apps/jobs_agent/users/user/sessions",
@@ -203,9 +238,16 @@ def run_agent(payload: dict, request: Request, credentials: HTTPAuthorizationCre
     # Copy incoming headers
     incoming_headers = dict(request.headers)
 
-    # Remove headers that should NOT be forwarded
+    # Remove problematic browser headers
     incoming_headers.pop("host", None)
     incoming_headers.pop("content-length", None)
+    incoming_headers.pop("origin", None)
+    incoming_headers.pop("referer", None)
+
+    # Forward auth properly
+    incoming_headers["Authorization"] = (
+        f"Bearer {credentials.credentials}"
+    )
 
     response = requests.post(
         AGENT_API_URL + "/run",
@@ -213,8 +255,11 @@ def run_agent(payload: dict, request: Request, credentials: HTTPAuthorizationCre
         headers=incoming_headers
     )
 
-    response_json = response.json()
     return {
         "status_code": response.status_code,
-        "response": extract_response(response_json)
+        "response": (
+            extract_response(response.json())
+            if "application/json" in response.headers.get("content-type", "")
+            else response.text
+        )
     }
