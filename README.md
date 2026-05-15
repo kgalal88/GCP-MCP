@@ -32,14 +32,14 @@ It consists of:
 
 ## 📁 Project Structure
 
-
+```
 fastapi-job-proxy/
 │
 ├── main.py # FastAPI entrypoint
 ├── requirements.txt # Dependencies
 ├── Dockerfile # Container definition
 └── agent/ # Deployment scripts (Toolbox + Jobs Agent)
-
+```
 
 ---
 
