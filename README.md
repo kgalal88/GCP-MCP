@@ -1,129 +1,116 @@
-#!/usr/bin/env bash
-set -euo pipefail
+# 🚀 FastAPI Cloud Run Job Proxy
 
-echo "🚀 Starting full setup..."
-
-###############################################################################
-# 📄 Generate README.md
-###############################################################################
-
-cat << 'EOF' > README.md
-
-# FastAPI Cloud Run Job Proxy 🚀
-
-A FastAPI-based service deployed on Google Cloud Run for secure service-to-service communication.
+A production-ready FastAPI service deployed on Google Cloud Run for secure service-to-service communication between Toolbox and Jobs Agent services.
 
 ---
 
-## 📌 Features
+## ⚡ Overview
 
-- FastAPI + Uvicorn
-- Dockerized deployment
-- Cloud Run multi-service architecture
-- IAM-secured communication
-- Toolbox + Jobs Agent integration
-- Vertex AI support
+This system is a cloud-native job orchestration platform built using FastAPI and Google Cloud Run. It enables secure communication between microservices using IAM authentication and service accounts.
+
+It consists of:
+
+- **FastAPI Service** → API gateway
+- **Toolbox Service** → backend execution layer
+- **Jobs Agent Service** → orchestration + AI (Vertex AI / Gemini)
+- **Google Cloud Run** → serverless compute
+- **IAM authentication** → secure service-to-service communication
 
 ---
 
-## 🧠 Architecture
+## 📦 Tech Stack
 
-FastAPI → Toolbox Service → Jobs Agent → Vertex AI → External APIs
+- FastAPI
+- Uvicorn
+- Python 3.10+
+- Docker
+- Google Cloud Run
+- Google IAM
+- Vertex AI (Gemini)
 
-EOF
+---
 
-echo "📄 README.md generated"
+## 📁 Project Structure
 
-###############################################################################
-# ⚙️ Config
-###############################################################################
 
-cd agent/
+fastapi-job-proxy/
+│
+├── main.py # FastAPI entrypoint
+├── requirements.txt # Dependencies
+├── Dockerfile # Container definition
+└── agent/ # Deployment scripts (Toolbox + Jobs Agent)
 
-: "${REGION:=us-central1}"
-: "${GOOGLE_CLOUD_PROJECT:?GOOGLE_CLOUD_PROJECT not set}"
 
-###############################################################################
-# ☁️ Deploy Toolbox Service
-###############################################################################
+---
 
-echo "☁️ Deploying toolbox-service..."
+## 🚀 FastAPI Features
 
-gcloud run deploy toolbox-service \
-  --source deploy-toolbox/ \
-  --region "$REGION" \
-  --project "$GOOGLE_CLOUD_PROJECT" \
-  --set-env-vars "DB_PASSWORD=$DB_PASSWORD,DB_INSTANCE=$DB_INSTANCE,DB_NAME=$DB_NAME,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,REGION=$REGION,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION" \
-  --allow-unauthenticated \
-  --quiet > ../logs_deploy_toolbox.log 2>&1 &
+### ✔ API Layer
+- REST APIs for job execution
+- Health check endpoint
+- Secure service-to-service communication
 
-###############################################################################
-# ⏳ Fetch Toolbox URL
-###############################################################################
+---
 
-echo "⏳ Waiting for toolbox URL..."
+## 🧪 Example API Endpoints
 
-sleep 15
+### Health Check
 
-TOOLBOX_URL=$(gcloud run services describe toolbox-service \
-  --region "$REGION" \
-  --project "$GOOGLE_CLOUD_PROJECT" \
-  --format='value(status.url)')
+```http
+GET /health
 
-echo "✅ Toolbox URL: $TOOLBOX_URL"
+Response:
 
-###############################################################################
-# 🤖 Deploy Jobs Agent
-###############################################################################
+{
+  "status": "ok"
+}
+Run Job
+POST /run-job
 
-echo "🤖 Deploying jobs-agent..."
+Request:
 
-gcloud run deploy jobs-agent \
-  --source . \
-  --region "$REGION" \
-  --project "$GOOGLE_CLOUD_PROJECT" \
-  --set-env-vars "TOOLBOX_URL=$TOOLBOX_URL,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION,GOOGLE_GENAI_USE_VERTEXAI=TRUE"
+{
+  "job_name": "data-processing",
+  "payload": {
+    "key": "value"
+  }
+}
 
-###############################################################################
-# 🌐 Fetch Agent URL
-###############################################################################
+Response:
 
-AGENT_URL=$(gcloud run services describe jobs-agent \
-  --region "$REGION" \
-  --project "$GOOGLE_CLOUD_PROJECT" \
-  --format='value(status.url)')
-
-echo "✅ Agent URL: $AGENT_URL"
-
-###############################################################################
-# 🔐 IAM CONFIG
-###############################################################################
-
-echo "🔐 Updating IAM..."
-
-gcloud run services update jobs-agent \
-  --add-custom-audiences=jobs-agent \
-  --project "$GOOGLE_CLOUD_PROJECT" \
-  --region "$REGION"
-
-###############################################################################
-# 🔑 Identity Token Example
-###############################################################################
-
-echo "🔑 Example identity token command:"
-
-echo "gcloud auth print-identity-token \
-  --impersonate-service-account way-back-home-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com \
-  --audiences='jobs-agent' \
-  --project '$GOOGLE_CLOUD_PROJECT'"
-
-###############################################################################
-# 🔎 Debug
-###############################################################################
-
-echo "🔎 Debug commands:"
-
-echo "gcloud run services describe jobs-agent --region $REGION --project $GOOGLE_CLOUD_PROJECT"
-echo "gcloud run services describe toolbox-service --region $REGION --project $GOOGLE_CLOUD_PROJECT"
-
-echo "🎉 Setup completed successfully!"
+{
+  "message": "Job triggered successfully"
+}
+🐳 Docker
+Build Image
+docker build -t fastapi-job-proxy .
+Run Container
+docker run -p 8080:8080 fastapi-job-proxy
+☁️ Cloud Architecture
+FastAPI Service
+      ↓
+Toolbox Service (Cloud Run)
+      ↓
+Jobs Agent Service (Cloud Run)
+      ↓
+Vertex AI / External APIs
+🔐 Security
+IAM-based service-to-service authentication
+Service account impersonation
+Custom audiences for Cloud Run services
+Secure token-based API calls
+🧠 Use Cases
+AI-powered job orchestration
+Workflow automation pipelines
+Microservice communication layer
+Cloud-native backend systems
+🚀 Deployment Flow
+Deploy Toolbox service to Cloud Run
+Retrieve Toolbox service URL
+Deploy Jobs Agent with Toolbox URL injected
+Configure IAM permissions
+Enable secure service-to-service communication
+📌 Notes
+Always use service accounts with least privilege
+Prefer IAM authentication over public endpoints
+Store secrets in Secret Manager (not env vars in production)
