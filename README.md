@@ -80,7 +80,7 @@ Response:
 
 {
   "message": "Job triggered successfully"
-}
+}```
 🐳 Docker
 Build Image
 docker build -t fastapi-job-proxy .
