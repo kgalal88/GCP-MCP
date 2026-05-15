@@ -33,7 +33,7 @@ It consists of:
 ## 📁 Project Structure
 
 ```text
-fastapi-proxy/           # API proxy for MCP agent and toolbox
+fastapi-job-proxy/           # API proxy for MCP agent and toolbox
 │
 ├── main.py              # FastAPI entrypoint
 ├── requirements.txt     # Dependencies
@@ -128,7 +128,7 @@ docker run -p 8080:8080 fastapi-job-proxy
 ## ☁️ Cloud Architecture
 
 ```text
-FastAPI Service
+FastAPI Proxy Service
       ↓
 Jobs Agent Service (Cloud Run)
       ↓
@@ -141,6 +141,12 @@ Vertex AI / External APIs
 
 ## 🚀 Deployment Commands
 
+### Deploy FastApi Proxy Service
+
+```bash
+gcloud run deploy fastapi-job-proxy --source . --region us-central1 --project=waybackhome-qxln4tprji8q9zklz8 --allow-unauthenticated --service-account fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
+```
+
 ### Deploy Toolbox Service
 
 ```bash
@@ -151,7 +157,6 @@ gcloud run deploy toolbox-service \
   --region $REGION \
   --project=$GOOGLE_CLOUD_PROJECT \
   --set-env-vars "DB_PASSWORD=$DB_PASSWORD,DB_INSTANCE=$DB_INSTANCE,DB_NAME=$DB_NAME,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,REGION=$REGION,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION" \
-  --allow-unauthenticated \
   --quiet > logs/deploy_toolbox.log 2>&1 &
 ```
 
@@ -206,18 +211,7 @@ gcloud run services update jobs-agent \
 
 ---
 
-### Generate Identity Token
-
-```bash
-gcloud auth print-identity-token \
-  --impersonate-service-account way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com \
-  --audiences='jobs-agent' \
-  --project=waybackhome-qxln4tprji8q9zklz8
-```
-
----
-
-### Replace Cloud Run Service
+### Alternatively, deploy jobs-agent-mcp which is a jobs agent + toolbox containers as a sidecar
 
 ```bash
 gcloud run services replace service.yaml \
@@ -232,6 +226,17 @@ gcloud run services replace service.yaml \
 ```bash
 gcloud run services describe jobs-agent-mcp \
   --region=$REGION \
+  --project=waybackhome-qxln4tprji8q9zklz8
+```
+
+---
+
+### Generate Identity Token
+
+```bash
+gcloud auth print-identity-token \
+  --impersonate-service-account way-back-home-sa@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com \
+  --audiences='jobs-agent' \
   --project=waybackhome-qxln4tprji8q9zklz8
 ```
 
