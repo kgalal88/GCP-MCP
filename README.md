@@ -64,7 +64,9 @@ Response:
 {
   "status": "ok"
 }
-Run Job
+```
+
+### Run Job
 POST /run-job
 
 Request:
@@ -84,6 +86,7 @@ Response:
 ```
 
 ## 🐳 Docker
+```
 Build Image
 docker build -t fastapi-job-proxy .
 Run Container
@@ -96,23 +99,36 @@ Toolbox Service (Cloud Run)
 Jobs Agent Service (Cloud Run)
       ↓
 Vertex AI / External APIs
-🔐 Security
+```
+
+## 🔐 Security
+```
 IAM-based service-to-service authentication
 Service account impersonation
 Custom audiences for Cloud Run services
 Secure token-based API calls
-🧠 Use Cases
+```
+
+## 🧠 Use Cases
+```
 AI-powered job orchestration
 Workflow automation pipelines
 Microservice communication layer
 Cloud-native backend systems
-🚀 Deployment Flow
+```
+
+## 🚀 Deployment Flow
+```
 Deploy Toolbox service to Cloud Run
 Retrieve Toolbox service URL
 Deploy Jobs Agent with Toolbox URL injected
 Configure IAM permissions
 Enable secure service-to-service communication
+```
+
 📌 Notes
+```
 Always use service accounts with least privilege
 Prefer IAM authentication over public endpoints
 Store secrets in Secret Manager (not env vars in production)
+```
