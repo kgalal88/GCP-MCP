@@ -1,10 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
 
----
+echo "🚀 Starting full setup..."
 
-# 🐧 Bash Script (Linux / Mac)
-
-```bash
-#!/bin/bash
+###############################################################################
+# 📄 Generate README.md
+###############################################################################
 
 cat << 'EOF' > README.md
 
@@ -18,58 +19,111 @@ A FastAPI-based service deployed on Google Cloud Run for secure service-to-servi
 
 - FastAPI + Uvicorn
 - Dockerized deployment
-- Google Cloud Run ready
-- IAM-secured service-to-service calls
-- Service Account authentication
-
----
-
-## 🚀 Local Run
-
-cd fastapi/
-python3 -m uvicorn main:app --reload
-
-Open:
-http://127.0.0.1:8000/docs
-
----
-
-## 🐳 Docker
-
-docker build -t fastapi-job-proxy .
-docker run -p 8080:8080 fastapi-job-proxy
-
----
-
-## ☁️ Deploy to Cloud Run
-
-gcloud services enable run.googleapis.com gcloud services enable cloudbuild.googleapis.com gcloud services enable artifactregistry.googleapis.com gcloud services enable iamcredentials.googleapis.com
-
-gcloud iam service-accounts create fastapi-job-proxy --project=waybackhome-qxln4tprji8q9zklz8
-
-gcloud run deploy fastapi-job-proxy \
---source . \
---region us-central1 \
---project=waybackhome-qxln4tprji8q9zklz8 \
---allow-unauthenticated \
---service-account fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
-
----
-
-## 🔐 IAM Setup
-
-gcloud run services add-iam-policy-binding toolbox-service \
---member="serviceAccount:fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com" \
---role="roles/run.invoker" \
---region=us-central1 \
---project=waybackhome-qxln4tprji8q9zklz8
+- Cloud Run multi-service architecture
+- IAM-secured communication
+- Toolbox + Jobs Agent integration
+- Vertex AI support
 
 ---
 
 ## 🧠 Architecture
 
-FastAPI Cloud Run → (Auth Token) → Toolbox Cloud Run Service
+FastAPI → Toolbox Service → Jobs Agent → Vertex AI → External APIs
 
 EOF
 
-echo "README.md generated successfully 🚀"
+echo "📄 README.md generated"
+
+###############################################################################
+# ⚙️ Config
+###############################################################################
+
+cd agent/
+
+: "${REGION:=us-central1}"
+: "${GOOGLE_CLOUD_PROJECT:?GOOGLE_CLOUD_PROJECT not set}"
+
+###############################################################################
+# ☁️ Deploy Toolbox Service
+###############################################################################
+
+echo "☁️ Deploying toolbox-service..."
+
+gcloud run deploy toolbox-service \
+  --source deploy-toolbox/ \
+  --region "$REGION" \
+  --project "$GOOGLE_CLOUD_PROJECT" \
+  --set-env-vars "DB_PASSWORD=$DB_PASSWORD,DB_INSTANCE=$DB_INSTANCE,DB_NAME=$DB_NAME,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,REGION=$REGION,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION" \
+  --allow-unauthenticated \
+  --quiet > ../logs_deploy_toolbox.log 2>&1 &
+
+###############################################################################
+# ⏳ Fetch Toolbox URL
+###############################################################################
+
+echo "⏳ Waiting for toolbox URL..."
+
+sleep 15
+
+TOOLBOX_URL=$(gcloud run services describe toolbox-service \
+  --region "$REGION" \
+  --project "$GOOGLE_CLOUD_PROJECT" \
+  --format='value(status.url)')
+
+echo "✅ Toolbox URL: $TOOLBOX_URL"
+
+###############################################################################
+# 🤖 Deploy Jobs Agent
+###############################################################################
+
+echo "🤖 Deploying jobs-agent..."
+
+gcloud run deploy jobs-agent \
+  --source . \
+  --region "$REGION" \
+  --project "$GOOGLE_CLOUD_PROJECT" \
+  --set-env-vars "TOOLBOX_URL=$TOOLBOX_URL,GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION,GOOGLE_GENAI_USE_VERTEXAI=TRUE"
+
+###############################################################################
+# 🌐 Fetch Agent URL
+###############################################################################
+
+AGENT_URL=$(gcloud run services describe jobs-agent \
+  --region "$REGION" \
+  --project "$GOOGLE_CLOUD_PROJECT" \
+  --format='value(status.url)')
+
+echo "✅ Agent URL: $AGENT_URL"
+
+###############################################################################
+# 🔐 IAM CONFIG
+###############################################################################
+
+echo "🔐 Updating IAM..."
+
+gcloud run services update jobs-agent \
+  --add-custom-audiences=jobs-agent \
+  --project "$GOOGLE_CLOUD_PROJECT" \
+  --region "$REGION"
+
+###############################################################################
+# 🔑 Identity Token Example
+###############################################################################
+
+echo "🔑 Example identity token command:"
+
+echo "gcloud auth print-identity-token \
+  --impersonate-service-account way-back-home-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com \
+  --audiences='jobs-agent' \
+  --project '$GOOGLE_CLOUD_PROJECT'"
+
+###############################################################################
+# 🔎 Debug
+###############################################################################
+
+echo "🔎 Debug commands:"
+
+echo "gcloud run services describe jobs-agent --region $REGION --project $GOOGLE_CLOUD_PROJECT"
+echo "gcloud run services describe toolbox-service --region $REGION --project $GOOGLE_CLOUD_PROJECT"
+
+echo "🎉 Setup completed successfully!"
