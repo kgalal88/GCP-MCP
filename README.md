@@ -33,12 +33,23 @@ It consists of:
 ## 📁 Project Structure
 
 ```text
-fastapi-job-proxy/
+fastapi-proxy/
 │
 ├── main.py              # FastAPI entrypoint
 ├── requirements.txt     # Dependencies
-├── Dockerfile           # Container definition
-└── agent/               # Deployment scripts (Toolbox + Jobs Agent)
+├── Dockerfile           # FastAPI container definition
+│
+agent/                   # Deployment scripts (Toolbox + Jobs Agent)
+│
+├── deploy-toolbox
+│    │
+│    ├── Dockerfile       # Container definition
+│    ├── tools.yaml       # MCP Toolbox container definition
+├── jobs_agent
+│    │
+│    ├── agent.py         # MCP agent script
+│    ├── .env             # Environment variables
+├── Dockerfile            # Jobs Agent container definition
 ```
 
 ---
@@ -119,9 +130,9 @@ docker run -p 8080:8080 fastapi-job-proxy
 ```text
 FastAPI Service
       ↓
-Toolbox Service (Cloud Run)
-      ↓
 Jobs Agent Service (Cloud Run)
+      ↓
+Toolbox Service (Cloud Run)
       ↓
 Vertex AI / External APIs
 ```
