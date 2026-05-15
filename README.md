@@ -215,18 +215,13 @@ gcloud auth print-identity-token \
 
 ---
 
-## 🚀 Deployment Flow
+## 🚀 Demo
 
-1. Deploy Toolbox service to Cloud Run
+1. Authentication
+<img width="1744" height="710" alt="image" src="https://github.com/user-attachments/assets/25b78d90-1fa9-4f52-8952-fdb84b4211df" />
+
 2. Retrieve Toolbox service URL
 3. Deploy Jobs Agent with Toolbox URL injected
 4. Configure IAM permissions
 5. Enable secure service-to-service communication
 
----
-
-## 📌 Notes
-
-- Always use service accounts with least privilege
-- Prefer IAM authentication over public endpoints
-- Store secrets in Secret Manager (not env vars in production)
