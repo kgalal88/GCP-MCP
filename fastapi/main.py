@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 import requests
 import google.auth
 from google.auth.transport.requests import Request
@@ -8,8 +8,11 @@ from google.auth import impersonated_credentials
 from generate_token import get_oidc_token
 from fastapi import FastAPI, Request
 import requests
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
 
 app = FastAPI()
+security = HTTPBearer()
 
 # Environment variables
 API_URL = os.getenv("API_URL", "https://toolbox-service-99546327658.us-central1.run.app/api/tool")
@@ -21,11 +24,14 @@ def generate_token(payload: dict):
     """
     Generates an impersonated identity token
     """
+    if(payload.get("client_id") == None or payload.get("client_id") != os.getenv("AUDIENCE", "jobs-agent")):
+        return {"error": "Invalid or missing client_id in payload"}
+
     token = get_oidc_token()
     return {"token": token}
 
 @app.post("/search-jobs")
-def search_jobs(payload: dict, request: Request):
+def search_jobs(payload: dict, request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
@@ -53,7 +59,7 @@ def search_jobs(payload: dict, request: Request):
     }
 
 @app.post("/search-jobs-by-description")
-def search_jobs_by_description(payload: dict, request: Request):
+def search_jobs_by_description(payload: dict, request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
@@ -81,7 +87,7 @@ def search_jobs_by_description(payload: dict, request: Request):
     }
 
 @app.post("/add-job")
-def add_job(payload: dict, request: Request):
+def add_job(payload: dict, request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
@@ -109,7 +115,7 @@ def add_job(payload: dict, request: Request):
     }
 
 @app.get("/get-agent-sessions")
-def get_agent_sessions(request: Request):
+def get_agent_sessions(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
@@ -136,7 +142,7 @@ def get_agent_sessions(request: Request):
     }
 
 @app.post("/create-agent-session")
-def create_agent_session(payload: dict, request: Request):
+def create_agent_session(payload: dict, request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
@@ -189,7 +195,7 @@ def extract_response(response_json):
     }
 
 @app.post("/run-agent")
-def run_agent(payload: dict, request: Request):
+def run_agent(payload: dict, request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Forwards incoming request headers + payload to Cloud Run
     """
