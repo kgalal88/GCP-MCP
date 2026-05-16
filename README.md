@@ -264,6 +264,27 @@ gcloud auth print-identity-token \
 
 ---
 
+## 🧠 AI Workflow Example
+```bash
+Client Request
+      ↓
+FastAPI Proxy
+      ↓
+Generate Identity Token
+      ↓
+Invoke Jobs Agent
+      ↓
+ADK Agent Calls Toolbox
+      ↓
+Toolbox Executes Task
+      ↓
+Gemini / Vertex AI Processing
+      ↓
+Response Returned
+```
+
+---
+
 ## 🧠 Use Cases
 
 - AI-powered job orchestration
