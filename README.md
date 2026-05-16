@@ -299,15 +299,18 @@ Response Returned
 1. API list
 <img width="1022" height="636" alt="image" src="https://github.com/user-attachments/assets/f22fd799-b5d4-4fdf-bb0b-645e39fc749a" />
 
-2. POST /generate-token Generate Token
+2. Generate Identity Token
+POST /generate-token Generate Token
 <img width="1744" height="710" alt="image" src="https://github.com/user-attachments/assets/25b78d90-1fa9-4f52-8952-fdb84b4211df" />
 
-3. POST /run-agent Run Agent
+3. Run AI Agent
+POST /run-agent Run Agent
 <img width="1756" height="884" alt="image" src="https://github.com/user-attachments/assets/602e1594-920c-4198-b7bb-011241ef80c0" />
 
 <img width="1757" height="812" alt="image" src="https://github.com/user-attachments/assets/7fa0c842-e457-458c-bc8e-5badce6b968b" />
 
-5. POST /add-job Add Job
+5. Add Job
+POST /add-job Add Job
 <img width="1754" height="853" alt="image" src="https://github.com/user-attachments/assets/04d644f5-5845-4c1e-8b53-7f1be178174a" />
 
 
