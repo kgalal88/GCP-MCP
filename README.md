@@ -1,6 +1,6 @@
-# 🚀 FastAPI Cloud Run Job Proxy
+# 🚀 FastAPI Cloud Run Job Proxy + ADK Agent + MCP Toolbox
 
-A production-ready FastAPI service deployed on Google Cloud Run for secure service-to-service communication between Toolbox and Jobs Agent services.
+A production-ready FastAPI service deployed on Google Cloud Run for secure service-to-service communication between MCP Toolbox and Jobs Agent services using ADK.
 
 ---
 
@@ -11,8 +11,8 @@ This system is a cloud-native job orchestration platform built using FastAPI and
 It consists of:
 
 - **FastAPI Service** → API gateway
-- **Toolbox Service** → backend execution layer
-- **Jobs Agent Service** → orchestration + AI (Vertex AI / Gemini)
+- **Toolbox Service** → backend execution layer (MCP)
+- **Jobs Agent Service** → orchestration + AI (Vertex AI / Gemini) (ADK)
 - **Google Cloud Run** → serverless compute
 - **IAM authentication** → secure service-to-service communication
 
@@ -225,6 +225,7 @@ gcloud auth print-identity-token \
 
 3. POST /run-agent Run Agent
 <img width="1756" height="884" alt="image" src="https://github.com/user-attachments/assets/602e1594-920c-4198-b7bb-011241ef80c0" />
+
 <img width="1757" height="812" alt="image" src="https://github.com/user-attachments/assets/7fa0c842-e457-458c-bc8e-5badce6b968b" />
 
 5. POST /add-job Add Job
