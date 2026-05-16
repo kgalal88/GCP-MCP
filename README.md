@@ -310,4 +310,5 @@ Response Returned
 ### 5. Add Job [POST /add-job Add Job]
 <img width="1754" height="853" alt="image" src="https://github.com/user-attachments/assets/04d644f5-5845-4c1e-8b53-7f1be178174a" />
 
-
+## 🚀 Related Medium Article
+https://medium.com/@khalid.mtwaly/building-a-secure-ai-job-orchestration-platform-with-fastapi-google-cloud-run-adk-and-mcp-a77f1659fc1a
