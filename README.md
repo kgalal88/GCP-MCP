@@ -217,11 +217,19 @@ gcloud auth print-identity-token \
 
 ## 🚀 Demo
 
-1. Authentication
+1. API list
+<img width="1022" height="636" alt="image" src="https://github.com/user-attachments/assets/f22fd799-b5d4-4fdf-bb0b-645e39fc749a" />
+
+2. POST /generate-token Generate Token
 <img width="1744" height="710" alt="image" src="https://github.com/user-attachments/assets/25b78d90-1fa9-4f52-8952-fdb84b4211df" />
 
-2. Retrieve Toolbox service URL
-3. Deploy Jobs Agent with Toolbox URL injected
-4. Configure IAM permissions
-5. Enable secure service-to-service communication
+3. POST /run-agent Run Agent 1
+<img width="1756" height="884" alt="image" src="https://github.com/user-attachments/assets/602e1594-920c-4198-b7bb-011241ef80c0" />
+
+4. POST /run-agent Run Agent 2
+<img width="1749" height="814" alt="image" src="https://github.com/user-attachments/assets/5de3009c-cd0c-41fc-af06-8a596c8781de" />
+
+5. POST /add-job Add Job
+<img width="1754" height="853" alt="image" src="https://github.com/user-attachments/assets/04d644f5-5845-4c1e-8b53-7f1be178174a" />
+
 
