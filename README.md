@@ -1,20 +1,76 @@
 # 🚀 FastAPI Cloud Run Job Proxy + ADK Agent + MCP Toolbox
 
-A production-ready FastAPI service deployed on Google Cloud Run for secure service-to-service communication between MCP Toolbox and Jobs Agent services using ADK.
+A production-ready cloud-native platform for secure AI-powered job orchestration using FastAPI, Google Cloud Run, ADK Agents, and MCP Toolbox integration.
 
 ---
 
 ## ⚡ Overview
 
-This system is a cloud-native job orchestration platform built using FastAPI and Google Cloud Run. It enables secure communication between microservices using IAM authentication and service accounts.
+This project provides a secure service-to-service architecture for orchestrating AI workflows using Google Cloud technologies.
 
-It consists of:
+The platform enables:
 
-- **FastAPI Service** → API gateway
-- **Toolbox Service** → backend execution layer (MCP)
-- **Jobs Agent Service** → orchestration + AI (Vertex AI / Gemini) (ADK)
-- **Google Cloud Run** → serverless compute
-- **IAM authentication** → secure service-to-service communication
+- AI agent orchestration with ADK
+- Secure inter-service communication using IAM
+- MCP Toolbox integration for backend execution
+- Vertex AI / Gemini-powered intelligent workflows
+- Fully serverless deployment on Cloud Run
+
+---
+
+## 🏗️ Architecture
+```
+┌─────────────────────────────┐
+│ FastAPI Proxy Service       │
+│ (Cloud Run)                 │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│ Jobs Agent Service          │
+│ ADK + Gemini + Vertex AI    │
+│ (Cloud Run)                 │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│ MCP Toolbox Service         │
+│ Backend Execution Layer     │
+│ (Cloud Run)                 │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│ Vertex AI / External APIs   │
+└─────────────────────────────┘
+```
+---
+
+## ✨ Features
+✔ FastAPI Proxy Layer
+- REST API endpoints
+- Secure token generation
+- Cloud Run integration
+- Health check endpoints
+- Agent execution APIs
+  
+✔ Jobs Agent (ADK)
+- AI orchestration layer
+- Gemini integration
+- Toolbox tool invocation
+- Vertex AI integration
+  
+✔ MCP Toolbox
+- Backend execution engine
+- Tool abstraction layer
+- Cloud-native deployment
+  
+✔ Security
+- IAM-based authentication
+- OIDC identity tokens
+- Service account impersonation
+- Cloud Run custom audiences
+- Secure service-to-service communication
 
 ---
 
@@ -27,6 +83,8 @@ It consists of:
 - Google Cloud Run
 - Google IAM
 - Vertex AI (Gemini)
+- ADK
+- MCP Toolbox
 
 ---
 
