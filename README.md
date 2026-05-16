@@ -146,7 +146,7 @@ FastAPI Proxy Service (Cloud Run)
       ↓
 Jobs Agent Service (Cloud Run)
       ↓
-Toolbox Service (Cloud Run)
+MCP Toolbox Service (Cloud Run)
       ↓
 Vertex AI / External APIs
 ```
@@ -161,7 +161,7 @@ Vertex AI / External APIs
 gcloud run deploy fastapi-job-proxy --source . --region us-central1 --project=waybackhome-qxln4tprji8q9zklz8 --allow-unauthenticated --service-account fastapi-job-proxy@waybackhome-qxln4tprji8q9zklz8.iam.gserviceaccount.com
 ```
 
-### Deploy Toolbox Service
+### Deploy MCP Toolbox Service
 
 ```bash
 cd agent/
@@ -224,7 +224,7 @@ gcloud run services update jobs-agent \
 
 ---
 
-### Alternatively, deploy jobs-agent-mcp which is a jobs agent + toolbox containers as a sidecar
+### Alternatively, Deploy Sidecar Version (Jobs Agent + Toolbox)
 
 ```bash
 gcloud run services replace service.yaml \
