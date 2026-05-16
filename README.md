@@ -20,6 +20,7 @@ The platform enables:
 
 ## 🏗️ Architecture
 <img width="1440" height="738" alt="image" src="https://github.com/user-attachments/assets/9c8dfcd5-b7e1-4a30-8149-5c07c79b678a" />
+
 ```
 ┌─────────────────────────────┐
 │ FastAPI Proxy Service       │
